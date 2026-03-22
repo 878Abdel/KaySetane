@@ -1,0 +1,63 @@
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./fonts/Satoshi-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./fonts/Satoshi-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./fonts/Satoshi-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./fonts/Satoshi-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./fonts/Satoshi-BlackItalic.woff2') format('woff2');
+  font-weight: 900;
+  font-style: italic;
+}
+ 
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Scope';
+  src: url('./assets/fonts/ScopeTrial-BoldExpanded.otf') format('opentype');
+  font-weight: 800;
+}
+
+@font-face {
+  font-family: 'Scope';
+  src: url('./assets/fonts/ScopeTrial-Bold.otf') format('opentype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Scope';
+  src: url('./assets/fonts/ScopeTrial-MediumExpanded.otf') format('opentype');
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: 'Scope';
+  src: url('./assets/fonts/ScopeTrial-LightExpanded.otf') format('opentype');
+  font-weight: 300;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,700;1,500;1,700&display=swap');
+.font-serif { font-family: 'Cormorant Garamond', serif; }
+.font-hello { font-family: 'Playfair Display', serif; }
