@@ -1321,19 +1321,6 @@ export default function Dashboard() {
                 <div style={{ padding:isMobile?"0 16px":"0" }}>
                   <HeroBanner items={heroItems} onPlay={setPlayer} onDetail={setDetail}/>
                 </div>
-                {/* Featured row */}
-                <div style={{ marginBottom:26 }}>
-                  <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:10,
-                    padding:isMobile?"0 16px":"0" }}>
-                    <FlagStripe w={12} h={2}/>
-                    <h2 style={{ fontSize:10, fontWeight:700, letterSpacing:"0.14em",
-                      textTransform:"uppercase", color:C.muted }}>⭐ Incontournables</h2>
-                  </div>
-                  <div style={{ display:"flex", gap:10, overflowX:"auto", scrollbarWidth:"none",
-                    paddingLeft:isMobile?16:0, paddingRight:isMobile?16:0, paddingBottom:4 }}>
-                    {FEATURED.map((f,i)=><MediaCard key={i} item={{...f}} localImg={f.img} onClick={setDetail}/>)}
-                  </div>
-                </div>
                 {/* VF rows on accueil */}
                 {Object.entries(FB_ROWS).map(([k,{label}])=>(
                   <MediaRow key={k} label={label} items={rows[k]||[]}
