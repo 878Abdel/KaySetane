@@ -664,8 +664,7 @@ const CtaFinal: React.FC = () => {
           </div>
           <h2 style={{ fontSize: isMobile ? "clamp(36px,10vw,58px)" : "clamp(44px,7vw,72px)",
             fontWeight:800, letterSpacing:"-0.04em", color:C.text, lineHeight:0.95, marginBottom:16 }}>
-            Dem sa bàkk.<br/>
-            <span style={{ color:C.yellow }}>Xool leegi.</span>
+            KaySetane
           </h2>
           <p style={{ fontSize: isMobile ? 13 : 14, color:C.muted, lineHeight:1.75, marginBottom:32 }}>
             Rejoins des milliers de spectateurs au Sénégal.<br/>
