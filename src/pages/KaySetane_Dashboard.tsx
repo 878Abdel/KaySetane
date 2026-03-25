@@ -6,7 +6,7 @@ import {
   Play, Search, Star, Tv, Film, TrendingUp, Home, Eye, X,
   Bookmark, BookmarkCheck, Trash2, ArrowLeft, ChevronRight,
   Radio, Zap, ChevronLeft, ChevronDown,
-  RefreshCw, Wifi, Globe, List,
+  Globe, List,
 } from "lucide-react";
 
 // ── ASSETS ───────────────────────────────────────────────────────────────────
@@ -208,6 +208,7 @@ const jikanToItem = (a:any) => ({
 
 // ── LIVE TV ───────────────────────────────────────────────────────────────────
 // Chaînes FR avec embeds qui fonctionnent sans VPN
+/* Commenté - Bientôt disponible
 const LIVE_CHANNELS = [
   // Généralistes
   { id:"tf1",      name:"TF1",         logo:"🔵", cat:"Généraliste",
@@ -244,6 +245,7 @@ const LIVE_CHANNELS = [
   { id:"molotov",  name:"Molotov",     logo:"📱", cat:"Généraliste",
     embed:"https://www.molotov.tv/watch/free",     note:"Toutes chaînes FR gratuites" },
 ];
+*/
 
 // ── FEATURED ─────────────────────────────────────────────────────────────────
 const FEATURED = [
@@ -473,242 +475,6 @@ const HeroBanner = ({ items, onPlay, onDetail }: {
             background:i===idx?C.yellow:"rgba(255,255,255,0.22)", cursor:"pointer", transition:"all 0.3s" }}/>
         ))}
       </div>
-    </div>
-  );
-};
-
-// ── LIVE TV PAGE ──────────────────────────────────────────────────────────────
-const PageLiveTV = ({ onPlay }: { onPlay:(ch:any)=>void }) => {
-  const isMobile=useIsMobile();
-  const cats=["Tous","Généraliste","Info","Sport","Culture"];
-  const [cat,setCat]=useState("Tous");
-  const filtered=cat==="Tous"?LIVE_CHANNELS:LIVE_CHANNELS.filter(c=>c.cat===cat);
-
-  return (
-    <div style={{ padding:isMobile?"16px 0 0":"16px 0 0" }}>
-      {/* Header */}
-      <div style={{ padding:isMobile?"0 16px 16px":"0 0 16px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-          <div style={{ width:8, height:8, borderRadius:99, background:C.red, animation:"pulse 1.5s infinite" }}/>
-          <span style={{ fontSize:11, fontWeight:700, color:C.text, textTransform:"uppercase", letterSpacing:"0.12em" }}>
-            TV en Direct
-          </span>
-        </div>
-        <span style={{ fontSize:9, color:C.muted }}>{filtered.length} chaînes</span>
-      </div>
-
-      {/* Category filter */}
-      <div style={{ display:"flex", gap:7, overflowX:"auto", scrollbarWidth:"none",
-        paddingBottom:14, paddingLeft:isMobile?16:0, paddingRight:isMobile?16:0 }}>
-        {cats.map(c=>(
-          <button key={c} onClick={()=>setCat(c)} style={{
-            padding:"6px 14px", borderRadius:99, fontSize:10, fontWeight:600,
-            cursor:"pointer", flexShrink:0, border:"none",
-            background:cat===c?C.yellow:C.glass, color:cat===c?"#000":C.muted,
-            outline:cat===c?"none":`1px solid ${C.border}`,
-          }}>{c}</button>
-        ))}
-      </div>
-
-      {/* Grid */}
-      <div style={{ display:"grid",
-        gridTemplateColumns:isMobile?"repeat(2,1fr)":"repeat(auto-fill,minmax(200px,1fr))",
-        gap:10, padding:isMobile?"0 16px":"0" }}>
-        {filtered.map(ch=>(
-          <motion.button key={ch.id} onClick={()=>onPlay(ch)}
-            whileHover={{ scale:1.02 }} whileTap={{ scale:0.97 }}
-            style={{ background:C.glass, border:`1px solid ${C.border}`, borderRadius:14,
-              padding:"14px 12px", cursor:"pointer", display:"flex", flexDirection:"column",
-              gap:8, textAlign:"left", outline:"none" }}>
-            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
-              <span style={{ fontSize:isMobile?24:28 }}>{ch.logo}</span>
-              <div style={{ display:"flex", alignItems:"center", gap:3,
-                background:"rgba(231,76,60,0.13)", borderRadius:99, padding:"2px 7px" }}>
-                <div style={{ width:5, height:5, borderRadius:99, background:"#e74c3c", animation:"pulse 1.5s infinite" }}/>
-                <span style={{ fontSize:7, fontWeight:700, color:"#e74c3c" }}>LIVE</span>
-              </div>
-            </div>
-            <div>
-              <p style={{ fontSize:isMobile?13:14, fontWeight:700, color:C.text, marginBottom:2 }}>{ch.name}</p>
-              <p style={{ fontSize:9, color:C.muted }}>{ch.cat}</p>
-            </div>
-            <div style={{ display:"flex", alignItems:"center", gap:4, padding:"6px 10px",
-              borderRadius:8, background:C.yellow, justifyContent:"center" }}>
-              <Play size={9} fill="#000" color="#000"/>
-              <span style={{ fontSize:10, fontWeight:700, color:"#000" }}>Regarder</span>
-            </div>
-          </motion.button>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// ── LIVE PLAYER MODAL ─────────────────────────────────────────────────────────
-const LivePlayerModal = ({ channel, onClose, allChannels, onSwitch }: {
-  channel:any; onClose:()=>void; allChannels:any[]; onSwitch:(ch:any)=>void;
-}) => {
-  const isMobile=useIsMobile();
-  const [error,setError]=useState(false);
-
-  return (
-    <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
-      style={{ position:"fixed", inset:0, zIndex:1000, background:"#000", display:"flex", flexDirection:"column" }}>
-
-      {/* Top bar */}
-      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between",
-        padding:isMobile?"10px 14px":"10px 20px", borderBottom:`1px solid ${C.border}`,
-        flexShrink:0, background:"rgba(8,6,4,0.97)" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:10, overflow:"hidden" }}>
-          <Radio size={13} color={C.red}/>
-          <span style={{ fontSize:10, fontWeight:800, letterSpacing:"0.15em", textTransform:"uppercase", color:C.text, flexShrink:0 }}>LIVE</span>
-          <span style={{ color:C.soft, fontSize:10 }}>›</span>
-          <span style={{ fontSize:12, fontWeight:600, color:C.text, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
-            {channel.logo} {channel.name}
-          </span>
-          <div style={{ display:"flex", alignItems:"center", gap:3, background:"rgba(231,76,60,0.12)",
-            borderRadius:99, padding:"2px 7px", flexShrink:0 }}>
-            <div style={{ width:5, height:5, borderRadius:99, background:"#e74c3c", animation:"pulse 1.5s infinite" }}/>
-            <span style={{ fontSize:8, fontWeight:700, color:"#e74c3c" }}>EN DIRECT</span>
-          </div>
-        </div>
-        <button onClick={onClose} style={{ width:30, height:30, borderRadius:99, background:C.glass,
-          border:`1px solid ${C.border}`, color:C.text, cursor:"pointer",
-          display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-          <X size={13}/>
-        </button>
-      </div>
-
-      {/* Note */}
-      <div style={{ padding:"5px 14px", background:"rgba(0,133,63,0.08)",
-        borderBottom:`1px solid rgba(0,133,63,0.18)`, flexShrink:0 }}>
-        <span style={{ fontSize:9, color:C.muted }}>{channel.note}</span>
-      </div>
-
-      {/* Player */}
-      <div style={{ flex:1, position:"relative", background:"#000" }}>
-        <iframe
-          key={channel.id}
-          src={channel.embed}
-          width="100%" height="100%"
-          frameBorder="0" allowFullScreen
-          allow="autoplay;fullscreen;picture-in-picture"
-          style={{ display:"block", border:"none", width:"100%", height:"100%" }}
-          onError={()=>setError(true)}
-        />
-        {error&&(
-          <div style={{ position:"absolute", inset:0, display:"flex", flexDirection:"column",
-            alignItems:"center", justifyContent:"center", gap:14, background:"rgba(8,6,4,0.92)" }}>
-            <Wifi size={28} color={C.muted}/>
-            <p style={{ fontSize:13, color:C.muted, textAlign:"center" }}>
-              Ce flux nécessite peut-être une connexion directe.<br/>
-              <a href={channel.embed} target="_blank" rel="noreferrer"
-                style={{ color:C.yellow, textDecoration:"none", fontWeight:700 }}>
-                Ouvrir dans un onglet →
-              </a>
-            </p>
-            <button onClick={()=>setError(false)} style={{ padding:"8px 18px", borderRadius:99,
-              background:C.glass, border:`1px solid ${C.border}`, color:C.muted,
-              fontSize:11, cursor:"pointer" }}>
-              <RefreshCw size={10} style={{ display:"inline", marginRight:5 }}/> Réessayer
-            </button>
-          </div>
-        )}
-        {/* Flag strip */}
-        <div style={{ position:"absolute", bottom:0, left:0, right:0, height:2, display:"flex", zIndex:5 }}>
-          <div style={{ flex:1, background:C.green }}/><div style={{ flex:1, background:C.yellow }}/><div style={{ flex:1, background:C.red }}/>
-        </div>
-      </div>
-
-      {/* Channel switcher strip */}
-      <div style={{ flexShrink:0, background:"rgba(8,6,4,0.98)", borderTop:`1px solid ${C.border}`,
-        padding:"8px 10px", display:"flex", gap:6, overflowX:"auto", scrollbarWidth:"none" }}>
-        {allChannels.map(ch=>(
-          <button key={ch.id} onClick={()=>{ setError(false); onSwitch(ch); }}
-            style={{ flexShrink:0, padding:"5px 11px", borderRadius:8, fontSize:10,
-              fontWeight:ch.id===channel.id?700:400, cursor:"pointer",
-              background:ch.id===channel.id?C.yellow:C.glass, color:ch.id===channel.id?"#000":C.muted,
-              border:ch.id===channel.id?"none":`1px solid ${C.border}` }}>
-            {ch.logo} {ch.name}
-          </button>
-        ))}
-      </div>
-    </motion.div>
-  );
-};
-
-// ── ANIME PAGE ────────────────────────────────────────────────────────────────
-const PageAnime = ({ onCardClick }: { onCardClick:(i:any)=>void }) => {
-  const isMobile=useIsMobile();
-  const [rows,setRows]=useState<Record<string,any[]>>({});
-  const [busy,setBusy]=useState<Record<string,boolean>>({});
-  const [q,setQ]=useState("");
-  const [results,setResults]=useState<any[]>([]);
-  const [searching,setSearching]=useState(false);
-  const stimer=useRef<any>(null);
-
-  const ROWS: { k:string; label:string; path:string; params:Record<string,string> }[] = [
-    { k:"top",     label:"⭐ Top Anime",       path:"/top/anime",  params:{ limit:"24" } },
-    { k:"season",  label:"📅 Saison en cours", path:"/seasons/now",params:{ limit:"24" } },
-    { k:"pop",     label:"🔥 Populaires",      path:"/top/anime",  params:{ filter:"bypopularity",limit:"24" } },
-    { k:"action",  label:"⚔️ Action",          path:"/anime",      params:{ genres:"1",order_by:"score",limit:"24" } },
-    { k:"romance", label:"💕 Romance",         path:"/anime",      params:{ genres:"22",order_by:"score",limit:"24" } },
-    { k:"movies",  label:"🎬 Films animés",    path:"/top/anime",  params:{ type:"movie",limit:"24" } },
-  ];
-
-  useEffect(()=>{
-    ROWS.forEach(async({k,path,params})=>{
-      if(rows[k]) return;
-      setBusy(b=>({...b,[k]:true}));
-      const d=await jikan(path,params);
-      setRows(r=>({...r,[k]:(d?.data||[]).map(jikanToItem).filter((a:any)=>a.poster_path)}));
-      setBusy(b=>({...b,[k]:false}));
-    });
-  },[]);
-
-  const doSearch=async(query:string)=>{
-    if(!query.trim()){setResults([]);setSearching(false);return;}
-    setSearching(true);
-    const d=await jikan("/anime",{q:query,limit:"24"});
-    setResults((d?.data||[]).map(jikanToItem).filter((a:any)=>a.poster_path));
-    setSearching(false);
-  };
-
-  const handleQ=(val:string)=>{
-    setQ(val);
-    if(stimer.current) clearTimeout(stimer.current);
-    if(val) stimer.current=setTimeout(()=>doSearch(val),500); else setResults([]);
-  };
-
-  return (
-    <div style={{ paddingTop:16 }}>
-      <div style={{ padding:isMobile?"0 16px 16px":"0 0 16px" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:8, padding:"9px 13px", borderRadius:12,
-          background:C.glass, border:`1px solid ${C.border}` }}>
-          <Search size={13} color={C.muted}/>
-          <input type="text" placeholder="Chercher un anime en français…" value={q}
-            onChange={e=>handleQ(e.target.value)}
-            style={{ background:"transparent", border:"none", outline:"none", flex:1, fontSize:12, color:C.text }}/>
-          {q&&<button onClick={()=>handleQ("")} style={{ background:"none", border:"none", cursor:"pointer", color:C.muted, padding:0, display:"flex" }}><X size={11}/></button>}
-        </div>
-      </div>
-      {q ? (
-        <div style={{ padding:isMobile?"0 16px":"0" }}>
-          <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:14 }}>
-            <FlagStripe w={12} h={2}/>
-            <p style={{ fontSize:10, color:C.soft, textTransform:"uppercase", letterSpacing:"0.16em", fontWeight:600 }}>
-              {searching?"Recherche…":`${results.length} résultat${results.length>1?"s":""}`}
-            </p>
-          </div>
-          <div style={{ display:"flex", flexWrap:"wrap", gap:10 }}>
-            {results.map((item,i)=><MediaCard key={`${item.id}-${i}`} item={item} onClick={onCardClick}/>)}
-          </div>
-        </div>
-      ) : (
-        ROWS.map(({k,label})=>(
-          <MediaRow key={k} label={label} items={rows[k]||[]} loading={!!busy[k]&&!rows[k]?.length} onCardClick={onCardClick}/>
-        ))
-      )}
     </div>
   );
 };
@@ -1453,7 +1219,6 @@ export default function Dashboard() {
   const [searching,setSearching] = useState(false);
   const [player,setPlayer]       = useState<any>(null);
   const [detail,setDetail]       = useState<any>(null);
-  const [liveChannel,setLiveChannel] = useState<any>(null);
   const [listeCount,setListeCount]   = useState(getListe().length);
   const [showSearch,setShowSearch]   = useState(false);
   const stimer = useRef<any>(null);
@@ -1700,12 +1465,15 @@ export default function Dashboard() {
       <AnimatePresence>
         {player&&<PlayerModal key="player" item={player} onClose={()=>setPlayer(null)}/>}
       </AnimatePresence>
+      {/* LivePlayerModal - Commenté - Bientôt disponible */}
+      {/* 
       <AnimatePresence>
         {liveChannel&&<LivePlayerModal key="live" channel={liveChannel}
           allChannels={LIVE_CHANNELS}
           onClose={()=>setLiveChannel(null)}
-          onSwitch={ch=>setLiveChannel(ch)}/>}
+          onSwitch={(ch:any)=>setLiveChannel(ch)}/>}
       </AnimatePresence>
+      */}
     </div>
   );
 }

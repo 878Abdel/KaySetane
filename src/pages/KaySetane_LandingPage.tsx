@@ -1,8 +1,8 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Play, ChevronRight, Star, X, Menu } from "lucide-react";
+import { Play, ChevronRight, X, Menu } from "lucide-react";
 
 // ── ASSETS ────────────────────────────────────────────────────────────────────
 import bgVideo            from "../assets/low.mp4";
@@ -10,7 +10,6 @@ import imgMonument        from "../assets/mariams-monument-246975_1920.jpg";
 import imgMosque          from "../assets/mariams-fisherman-mosque-246976_1920.jpg";
 import imgBridge          from "../assets/christianyanndiedhiou-senegalbridge-4737659_1920.jpg";
 import imgBeach           from "../assets/7929e082-3435-4ff8-ac9a-f77ff9944872.jpg";
-import imgWoman           from "../assets/3bbb2f3f-f9d3-4495-8ad8-ee3c6a311e29.jpg";
 import imgStatuette       from "../assets/anaterate-few-2919164_1920.png";
 import posterSuperman     from "../assets/Superman.jpg";
 import posterTrumanShow   from "../assets/The_Truman_Show.jpg";
